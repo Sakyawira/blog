@@ -1,0 +1,47 @@
+---
+import '@/styles/global.css';
+import '@/styles/reading.scss';
+import Header from '@/components/Header.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'Sakya Idea Corner',
+  description = 'Essays on making, learning, and the small details that make software feel human.',
+} = Astro.props;
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const canonicalURL = Astro.site ? new URL(Astro.url.pathname, Astro.site) : Astro.url;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="article" />
+    <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <title>{title} | Sakya Idea Corner</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <Header />
+    <main id="content">
+      <slot />
+    </main>
+    <footer
+      class="mx-auto flex w-full max-w-6xl flex-col gap-3 border-t border-border px-6 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p>Sakya Idea Corner, written in the open.</p>
+      <p>Built with Astro and Markdown.</p>
+    </footer>
+  </body>
+</html>

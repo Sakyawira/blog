@@ -1,0 +1,57 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { ArrowUpRight } from '@lucide/astro';
+import { formatDate } from '@/lib/format';
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+  featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const href = `${base}${post.id}/`;
+---
+
+<a
+  href={href}
+  class:list={[
+    'group block border-t border-border py-6 transition-colors hover:border-primary',
+    featured && 'rounded-lg border border-border bg-card p-6 shadow-sm',
+  ]}
+>
+  <div class="flex items-start justify-between gap-6">
+    <div class="max-w-2xl">
+      <div
+        class="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs font-medium text-muted-foreground"
+      >
+        <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+        {post.data.readingTime && <span aria-hidden="true">/</span>}
+        {post.data.readingTime && <span>{post.data.readingTime}</span>}
+      </div>
+      <h2
+        class:list={[
+          'font-heading font-semibold tracking-tight text-foreground group-hover:text-primary',
+          featured ? 'text-3xl sm:text-4xl' : 'text-2xl',
+        ]}
+      >
+        {post.data.title}
+      </h2>
+      <p class="mt-3 max-w-xl leading-7 text-muted-foreground">{post.data.description}</p>
+      <div class="mt-5 flex flex-wrap gap-2">
+        {
+          post.data.tags.map((tag) => (
+            <span class="rounded-md border border-border bg-secondary px-2.5 py-1 text-xs font-medium text-secondary-foreground">
+              #{tag}
+            </span>
+          ))
+        }
+      </div>
+    </div>
+    <ArrowUpRight
+      class="mt-1 size-5 shrink-0 text-muted-foreground transition-transform group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-primary"
+    />
+  </div>
+</a>

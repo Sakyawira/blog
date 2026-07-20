@@ -1,0 +1,563 @@
+---
+title: 'A Restructured Tax & Labour System for New Zealand'
+description: 'as written by a non-economist that probably has no idea what he is talking about'
+pubDate: 2026-07-20
+draft: false
+---
+
+import { ArrowRight, GraduationCap, Scale, ShieldCheck, TriangleAlert } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { PolicyStatsResizable } from '@/components/policy/PolicyStatsResizable';
+import {
+  HouseholdTaxBreakdownTable,
+  HouseholdTaxChart,
+  GdpFundingChart,
+  RevenueCompositionChart,
+  TrainingContributionBreakdownTable,
+  TrainingContributionChart,
+  TransitionChart,
+} from '@/components/policy/PolicyCharts';
+import { PolicyYearCarousel } from '@/components/policy/PolicyYearCarousel';
+
+This is an amateur, values-driven restructuring of New Zealand's tax, labour, education, housing, and welfare systems. It replaces personal income tax with a phased-in land value tax, tiered GST, tariffs, and a set of integrity levies (fringe benefits tax, securities-backed loan tax), while retaining a reinstated corporate/company tax (0% to $1M profit, 25% above); restructures secondary education around corporate-funded training; sends a share of students abroad on sponsored study-and-work exchanges; replaces state pensions and healthcare with mandatory non-profit insurance; and introduces a 75% inheritance tax.
+
+The guiding value underlying the design remains explicit: generational wealth transfer is treated as something to discourage rather than protect, in favour of each generation building and spending down its own position.
+
+**Disclaimer**: this is a personal project, not an official policy proposal. It is not affiliated with any political party or government agency, and it has not been reviewed by economists, lawyers, or other professionals. It is intended as a thought experiment and a conversation starter, not as a definitive blueprint for action.
+
+<PolicyStatsResizable
+  client:load
+  stats={[
+    { value: '0%', label: 'personal income tax' },
+    { value: '1% to 5%', label: 'land value tax phase-in' },
+    { value: '5x', label: 'maximum pay ratio inside an entity' },
+    { value: '75%', label: 'inheritance tax on broad estates' },
+  ]}
+/>
+
+<div class="my-12 grid gap-3 md:grid-cols-3">
+  <Card className="group h-full" size="sm">
+    <CardHeader className="gap-3">
+      <div className="grid size-9 place-items-center text-primary" aria-hidden="true">
+        <Scale className="size-5" />
+      </div>
+      <p className="eyebrow">01 / Fund</p>
+      <CardTitle className="font-heading text-lg font-semibold leading-tight">
+        Move the tax base
+      </CardTitle>
+      <CardDescription className="text-sm leading-6">
+        Land, consumption, imports, large benefits, securities-backed borrowing, inheritance, and
+        corporate profit above $1M replace tax on wages.
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="mt-auto pt-0">
+      <Badge variant="outline" className="gap-2 uppercase tracking-[0.04em]">
+        Revenue engine
+      </Badge>
+    </CardContent>
+  </Card>
+  <Card className="group h-full" size="sm">
+    <CardHeader className="gap-3">
+      <div className="grid size-9 place-items-center text-primary" aria-hidden="true">
+        <ShieldCheck className="size-5" />
+      </div>
+      <p className="eyebrow">02 / Protect</p>
+      <CardTitle className="font-heading text-lg font-semibold leading-tight">
+        Insure the floor
+      </CardTitle>
+      <CardDescription className="text-sm leading-6">
+        Health, pension, and unemployment insurance become mandatory and non-profit, with residual
+        public support where insurance cannot work.
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="mt-auto pt-0">
+      <Badge variant="outline" className="gap-2 uppercase tracking-[0.04em]">
+        Social contract
+      </Badge>
+    </CardContent>
+  </Card>
+  <Card className="group h-full" size="sm">
+    <CardHeader className="gap-3">
+      <div className="grid size-9 place-items-center text-primary" aria-hidden="true">
+        <GraduationCap className="size-5" />
+      </div>
+      <p className="eyebrow">03 / Build</p>
+      <CardTitle className="font-heading text-lg font-semibold leading-tight">
+        Rewire the pipeline
+      </CardTitle>
+      <CardDescription className="text-sm leading-6">
+        Corporate training rotations, overseas study-work exchanges, skilled migration, and new
+        export bets supply the growth strategy.
+      </CardDescription>
+    </CardHeader>
+    <CardContent className="mt-auto pt-0">
+      <Badge variant="outline" className="gap-2 uppercase tracking-[0.04em]">
+        Capacity bet
+      </Badge>
+    </CardContent>
+  </Card>
+</div>
+
+<Separator className="my-12" />
+
+## The Full Policy Package
+
+### Tax Structure
+
+- No personal income tax — wages and salaries are entirely untaxed.
+- Corporate/company tax (reinstated): 0% on annual company profit up to $1M, 25% flat on profit above $1M. Entities are consolidated for the purpose of calculating the $1M threshold using the same direct-control test applied in the Labour Market Rules — two or more companies are treated as one entity if one controls the other's operations, staffing, or strategic decisions, regardless of recorded ownership percentage. This closes the gap a pure ownership-percentage test would leave open (nominee shareholders, ownership spread across family members or trusts to stay under a control threshold while operations remain centrally run).
+- National Land Value Tax (LVT): collected by central government, no owner-occupier exemption, phased in over 5 years to give the market time to adjust — 1% in year 1, rising by 1 percentage point each year, reaching a permanent 5% from year 6 onward. As land values are expected to soften in response to the tax (and to the home-equity drawdown mechanism), the actual dollar bill in later years may rise more slowly than the rate schedule alone would suggest, or even fall in real terms if price declines outpace the rate increases.
+- Apartments and other unit-titled properties: land value is assessed once for the whole site and apportioned across individual units by ownership interest, using the same method NZ's valuers already apply for rates today. Because land value is shared across many units, an apartment's LVT bill is typically far lower in absolute terms than a standalone house of similar total property value — a strong, organic incentive toward higher-density housing that reinforces the tax's underlying purpose.
+- Local council rates: reformed to apply only to Value of Improvements (VI) — the building/development value, excluding land — multiplied by 0.1% per resident occupying the property. A 4-person household in a $500k-improvement property pays 0.1% × 4 × $500k = $2,000/year; a single occupant in the same property pays $500/year.
+- Tiered GST: 0% on groceries, clothing under $200/item, residential housing, and scheduled public transport (including services like the TranzAlpine); 30% standard rate on everything else; ~45-50% premium rate on short-term/hotel accommodation, tour and travel-company products, and luxury goods priced 5x or more over the average cost of an equivalent product.
+- Import tariffs: 10% default on all imports from non-FTA-partner countries, with an exemption process (no domestic provider exists); tariff is payable unless and until an exemption is approved. FTA-partner-origin goods (China, Australia, and other treaty partners) are excluded, as required by existing trade agreements.
+- Subsurface volume levy (below 5m depth, state-owned): ~$1,000/m³/year for construction/occupation (basements, carparks, foundations); a deliberately prohibitive rate for mining/extraction footprint, functioning as de facto nationalisation; negligible in practice for water (bore-shaft volume only).
+- Fringe benefits tax: 50% on the value of non-cash assets given as compensation, above $1M, charged once at the time of transfer. The full asset value counts toward the 5x pay-ratio calculation for that period.
+- Securities-backed loan tax: 50% on new borrowing drawn within a financial year against financial securities/equity, above a threshold of roughly NZD 2–3 million (approx. double mean NZ net worth, recalculated periodically). Resets annually — does not accumulate against a lifetime cap. Explicitly excludes mortgages, business operating loans, and ordinary consumer credit. Requires anti-fragmentation rules aggregating loans across related entities/trusts for the same beneficial owner.
+- 75% inheritance tax, applied broadly, without a large exemption threshold for modest estates.
+- Trust beneficial-ownership disclosure, replacing an outright ban, to close inheritance-tax avoidance while preserving legitimate uses (minors, disabled beneficiaries, charities).
+- Tourism levies: raised international visitor arrival levy, higher national park/great walk access fees for foreign visitors, cruise-ship per-passenger port levies.
+
+### Labour Market Rules
+
+- 5x maximum pay ratio between the highest- and lowest-paid employee at any entity, using a direct-control test to define "employee" (closing shell-company and outsourcing workarounds while excluding genuine contractors and franchisees).
+- Mandatory equal bonus distribution — any bonus pool split equally per employee.
+- Ministers, MPs, and senior public-service "chief" level salaries reduced to median NZ wage (adopted primarily for legitimacy/consistency with the 5x cap; fiscally negligible).
+
+### Welfare Replacement
+
+- Mandatory non-profit health insurance — Swiss/Dutch-style, community-rated, with risk equalisation between insurers.
+- Mandatory pension accounts — Chile-style individual accounts, with regulatory guardrails on fees and a minimum-return backstop.
+- Mandatory non-profit unemployment insurance — Ghent-system style, with a government fiscal backstop for systemic recessions.
+- Residual, tax-funded welfare retained for categories that cannot be insured: disability support, Working for Families-style child payments, housing assistance, sole-parent support, and jobseeker support for those without a contribution history.
+
+### Housing-Specific Rules
+
+- Rent stabilisation: 5% annual increase cap tied permanently to the housing unit (not the tenancy) — landlords cannot reset pricing via eviction or new contracts, enforced by a tenancy authority.
+- New-build starting rents pegged to the regional average for that housing type, plus the prior year's inflation rate.
+- Mutual tenancy bond: 4 weeks' rent from tenant and landlord alike (8 weeks total); the landlord's bond is forfeited to the tenant if an eviction or rent increase is found unfair.
+- Elderly home-equity mechanism (retirees, primary residence, 183+ days/year): unpaid LVT after 183 days automatically triggers a home-reversion-style equity draw (percentage-of-value sale, no compounding interest, no negative equity, lifetime occupancy guaranteed). LVT liability is split proportionally with any lender/investor holding a share, creating an incentive to draw down progressively over time. Draws are intended to be pooled and securitised, sold to domestic (KiwiSaver) and international institutional investors.
+
+<Card className="my-10" size="sm" aria-labelledby="transition-chart-title">
+  <CardHeader>
+    <p className="eyebrow">LVT and housing transition</p>
+    <CardTitle id="transition-chart-title" className="mt-2 text-lg font-semibold leading-tight">
+      When land values soften, wages can outrun the LVT
+    </CardTitle>
+    <CardDescription className="leading-6">
+      Index, with Year 1 set to 100. The line path shows the intended interaction between a falling
+      house/land price base, the phased LVT bill, and higher take-home wages.
+    </CardDescription>
+  </CardHeader>
+  <CardContent>
+    <TransitionChart client:load />
+    <p className="mt-4 text-xs leading-5 text-muted-foreground">
+      The LVT bill initially rises because the rate moves from 1% toward 5%; this illustration then
+      assumes the land-value response is strong enough for the bill to fall by Year 10. The wage
+      line represents take-home purchasing power after income tax is removed.
+    </p>
+  </CardContent>
+</Card>
+
+### Education Restructuring
+
+- Ages 12–18: a 5-hour school day — 2 hours of core academic content (maths, science, one foreign language of choice, civics, and one sport of choice) plus 3 hours of corporate-run, non-productive training (genuine skills instruction, not billable work), rotating every 3 months across 12 different placements over the 6 years (software, mechanical, agriculture, hospitality, fishing, healthcare-adjacent, etc.).
+- A national coordinating institutional body (modelled on Germany/Switzerland's industry chambers and NZ's existing Industry Training Organisations) allocates rotations for sector variety, certifies and audits training quality, and enforces the firewall between genuine training and productive labour.
+- Ages 16–22 (optional, alongside the above): a share of students take a fully sponsored overseas study-and-work programme, funded by partner countries facing population decline, studying and then working under contract before returning to New Zealand; students are free to return to the host country permanently after a domestic work period, with no enforced lifetime return mandate. The programme's fiscal case rests on education-cost savings and diaspora remittance/investment, not on guaranteed workforce return.
+
+<Card className="my-10" size="sm" aria-labelledby="training-contribution-title">
+  <CardHeader>
+    <p className="eyebrow">Separate from household taxes</p>
+    <CardTitle
+      id="training-contribution-title"
+      className="mt-2 text-lg font-semibold leading-tight"
+    >
+      Company training contribution
+    </CardTitle>
+    <CardDescription className="leading-6">
+      The proposed ages 12–18 programme asks companies to provide supervised, non-productive skills
+      instruction. This is shown as delivery capacity and a possible talent-pipeline benefit, not as
+      an invented dollar charge.
+    </CardDescription>
+  </CardHeader>
+  <CardContent>
+    <TrainingContributionChart client:load />
+    <TrainingContributionBreakdownTable />
+  </CardContent>
+</Card>
+
+### Growth Strategy
+
+- Zero personal income tax, paired with a 0% rate on the first $1M of company profit and 25% above that, positioned as a deliberate pitch to attract globally mobile high earners, remote workers, and businesses considering redomiciling.
+- Fast-tracked skilled-migration visas for doctors and renewable-energy engineers, reusing existing domestic licensing exams (the same exam sat by NZ-trained graduates) gated by an English-language test and a prior-qualification screen, piloted with doctors first.
+- Long-term industrial strategy options: green hydrogen export (leveraging NZ's hydro/geothermal capacity), data-centre/AI-compute hosting, and positioning NZ as a financial hub for the new securitised home-equity and infrastructure-bond asset classes.
+
+<Separator className="my-16" />
+
+## How the Policies Interact
+
+### Reinforcing Combinations
+
+- Flat LVT + VI/occupancy-based local rates cleanly separate national and local tax bases with no double-taxation, while tying local funding to actual service demand (people, not just property value).
+- Fringe benefits tax + securities-backed loan tax together close the two main ways a wealthy individual could otherwise avoid all taxation entirely under a no-income-tax, no-capital-gains-tax system: in-kind compensation, and living off borrowed money against untaxed equity.
+- Annually re-indexed LVT + home-reversion equity draws remove the negative-equity and margin-call risk that a fixed-debt reverse mortgage would create for fixed-income owners facing the flat LVT.
+- Direct-control employee test + 5x pay cap + fringe benefits tax together close shell-company gaming, in-kind compensation gaming, and outsourcing gaming of the pay-ratio rule simultaneously.
+- Corporate 12–18 training programme + fast-tracked skilled migration build a domestic pipeline and reinforce it with an external one, both aimed at the same underlying goal: a highly-skilled, well-matched workforce.
+
+### Tensions and Unresolved Risks
+
+- The LVT's destination rate (5%, reached in year 6) remains the single largest uncertainty in the system, though the 5-year phase-in substantially improves the picture. A year-1 bill of roughly 1% on an average property (land value $400–500k) is approximately $4,000–5,000 — a real but manageable cost, closer in scale to a significant rates increase than a household-threatening shock. If land values soften over the phase-in period as intended (both from the tax itself and from the home-equity drawdown mechanism releasing supply), the year-6 dollar bill at the full 5% rate could land well below what 5% on today's values would suggest. The main residual risk is a scenario where land values stay comparatively sticky while the rate keeps climbing on schedule — in which case the final year's step-up could still land closer to the harder $20,000+ scenario for standalone houses on high land value. Building in a data-triggered pause (delaying the final step if median land values have not softened materially by year 3–4) would further reduce this risk.
+- Apportioned land value for apartments and unit-titled housing means the LVT lands far more lightly on higher-density living than on standalone houses of similar total value — a genuinely positive, self-reinforcing interaction with the tax's underlying purpose, and one that naturally reduces exposure for retirees and lower-income households already living in higher-density housing.
+- Reinstating corporate tax (0% to $1M, 25% above) closes what was identified repeatedly as the single largest gap in the system — a company's profit is now taxed annually, at the point it is earned, regardless of whether the owner ever takes salary, borrows against shares, or dies. This is a much stronger revenue base than the fringe benefits tax and securities-backed loan tax alone, which remain useful as backstops for the residual cases (in-kind compensation, large borrowing) but are no longer the only mechanisms touching business-derived wealth.
+- Securities-backed lending remains the lightest-taxed way to hold wealth even after the new loan tax — a patient holder who never borrows above the ~$2–3M annual threshold and never sells faces close to zero ongoing tax exposure, while a landholder faces the full flat 5% LVT every year regardless of income. This continues to push sophisticated wealth away from land and toward equity.
+- Overseas study/work exchange no longer has an enforced return mechanism — the fiscal case shifted deliberately from a workforce-return saving to a smaller, slower, less certain diaspora-remittance benefit, since an enforceable international return mandate was assessed as impractical and prone to undermining the host country's incentive to participate at all.
+- Permanent per-unit rent caps and mandatory training/apprenticeship obligations on companies both risk uneven compliance quality if mandated uniformly across all businesses regardless of size or fit — both work better as strongly incentivised, audited systems than as blanket mandates.
+
+### The Core Unresolved Question
+
+The system commits to zero personal income tax and a light-touch corporate tax (0% to $1M, 25% above), funded by land, consumption, a reinstated corporate tax, and a set of integrity levies. This is a genuinely novel combination with no exact real-world precedent, and its success depends heavily on two things going right simultaneously: the phased LVT being absorbed by the equity-share/securitisation market without destabilising the land value base, and the growth strategy (skilled migration, zero personal-tax positioning, export growth) generating enough new economic activity to expand the GST, corporate tax, and land tax base faster than any capital or population flight shrinks it.
+
+<Alert aria-labelledby="policy-risk-title" className="border-primary/40 bg-primary/5 p-5">
+  <TriangleAlert aria-hidden="true" />
+  <div>
+    <p className="eyebrow">Read with skepticism</p>
+    <AlertTitle id="policy-risk-title" className="mt-2 text-lg font-semibold leading-tight">
+      The 5% LVT is the hinge assumption
+    </AlertTitle>
+    <AlertDescription className="mt-2 leading-6">
+      The document is strongest as a map of trade-offs, not as a forecast. Its fiscal outcome
+      depends on land values softening, the home-equity market maturing, and wealthy capital not
+      simply relocating.
+    </AlertDescription>
+  </div>
+</Alert>
+
+<Separator className="my-16" />
+
+## Revenue Picture
+
+| Source                                                               | Est. % of GDP                                                                                             | Status                                                              |
+| -------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Land Value Tax (phased 1%→5% over 5 yrs, apportioned for apartments) | Below original estimate in yrs 1-5; converging toward original 5-10% of GDP range (or higher) from year 6 | Confirmed schedule; phase-in meaningfully reduces shock risk        |
+| Tiered GST (0% / 30% / ~45-50%)                                      | 8.5–13.5%                                                                                                 | Confirmed                                                           |
+| Subsurface levy — construction                                       | 1.3–1.9%                                                                                                  | Confirmed; erodes over time                                         |
+| Subsurface levy — mining / water                                     | ~0%                                                                                                       | Functions as nationalisation, not revenue                           |
+| Import tariffs (10%, non-FTA)                                        | 0.3–0.7%                                                                                                  | Confirmed                                                           |
+| Tourism levies                                                       | 0.3–0.8%                                                                                                  | Confirmed                                                           |
+| Fringe benefits tax (50% over $1M)                                   | 0.05–0.2%                                                                                                 | Confirmed; primarily defensive                                      |
+| Securities-backed loan tax (50% over ~$2-3M/yr)                      | 0.05–0.2%                                                                                                 | Confirmed; primarily defensive                                      |
+| MP/chief salary alignment                                            | 0.06–0.07%                                                                                                | Symbolic; fiscally negligible                                       |
+| Inheritance tax (75%)                                                | Small early, rising over 10–20 yrs                                                                        | Confirmed                                                           |
+| Corporate/company tax (0% to $1M, 25% above)                         | 3–4%                                                                                                      | Confirmed — reinstated; largest single addition to the revenue base |
+
+Spending-side offsets (not revenue, but reduce what the state needs to fund): overseas scholarship programme (-0.5 to -1.0% of GDP in avoided tertiary cost) and corporate 12-18 training programme (-0.5 to -0.9% of GDP in avoided secondary schooling cost).
+
+Excluding the LVT's uncertain range, confirmed sources (now including reinstated corporate tax) land around 14-22% of GDP, against a state funding need (education, defence, law and order, residual welfare, infrastructure, debt servicing, after health and pensions are removed) of roughly 16-21.5% of GDP net of the education cost-shifts. Reinstating corporate tax was the single largest change to the revenue picture in this whole process — it brings the system very close to fully closing the gap on its own, without needing to rely as heavily on the LVT performing at the top of its range or the growth strategy fully materialising. The phased LVT remains a significant number, but is no longer the sole determinant of whether the system runs a surplus or a shortfall.
+
+<div class="my-10 grid gap-4 lg:grid-cols-2">
+  <Card size="sm" aria-labelledby="revenue-composition-title">
+    <CardHeader>
+      <p class="eyebrow">Midpoint composition</p>
+      <CardTitle
+        id="revenue-composition-title"
+        className="mt-2 text-lg font-semibold leading-tight"
+      >
+        Where the policy revenue comes from
+      </CardTitle>
+      <CardDescription className="leading-6">
+        Midpoint estimates as a share of GDP. The donut includes the LVT midpoint as a separate
+        slice, while unquantified inheritance receipts remain excluded.
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
+      <RevenueCompositionChart client:load />
+      <p class="mt-4 text-xs leading-5 text-muted-foreground">
+        Quantified midpoint total including the LVT midpoint: approximately 25.0% of GDP. The
+        confirmed non-LVT lines total approximately 17.5%; the source table gives a wider range of
+        roughly 14–22% before the uncertain LVT range is added. “Other quantified lines” groups
+        tourism levies, import tariffs, fringe benefits tax, securities-backed loan tax, and
+        MP/chief salary alignment.
+      </p>
+    </CardContent>
+  </Card>
+  <Card size="sm" aria-labelledby="gdp-funding-title">
+    <CardHeader>
+      <p class="eyebrow">Revenue versus need</p>
+      <CardTitle id="gdp-funding-title" className="mt-2 text-lg font-semibold leading-tight">
+        GDP share accrued versus required
+      </CardTitle>
+      <CardDescription className="leading-6">
+        The current-system column is a rounded reference baseline, not a figure calculated in this
+        policy document. The policy columns use its stated revenue and funding ranges; the LVT bar
+        uses the midpoint of the article's 5–10% of GDP Year 6+ estimate.
+      </CardDescription>
+    </CardHeader>
+    <CardContent>
+      <GdpFundingChart client:load />
+      <p class="mt-4 text-xs leading-5 text-muted-foreground">
+        The post-policy funding need is not directly comparable to current public spending because
+        health and pensions are moved out of the state-funded baseline. Policy revenue including LVT
+        is approximately 22.5–27.5% of GDP, with 25% shown as the midpoint.
+      </p>
+    </CardContent>
+  </Card>
+</div>
+
+<Separator className="my-16" />
+
+## Personas: Poorest, Average, and Richest New Zealanders
+
+These composite profiles illustrate how the system is likely to land across the wealth spectrum, at 1, 5, and 10 years after implementation. They are illustrative, not statistical predictions.
+
+<div class="my-8 grid gap-4 md:grid-cols-3">
+  <Card className="h-full" size="sm">
+    <CardHeader className="gap-2">
+      <Badge variant="outline" className="w-fit uppercase tracking-[0.12em]">
+        The poorest
+      </Badge>
+      <CardTitle className="text-base font-semibold">Renter with one child</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-sm leading-6 text-muted-foreground">
+        Likely close to break-even on tax, but most exposed to gaps during the welfare transition.
+      </p>
+    </CardContent>
+  </Card>
+  <Card className="h-full" size="sm">
+    <CardHeader className="gap-2">
+      <Badge variant="outline" className="w-fit uppercase tracking-[0.12em]">
+        The average
+      </Badge>
+      <CardTitle className="text-base font-semibold">Dual-income homeowner</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-sm leading-6 text-muted-foreground">
+        Trades income-tax relief against a rising LVT, with density and equity drawdown as escape
+        valves.
+      </p>
+    </CardContent>
+  </Card>
+  <Card className="h-full" size="sm">
+    <CardHeader className="gap-2">
+      <Badge variant="outline" className="w-fit uppercase tracking-[0.12em]">
+        The richest
+      </Badge>
+      <CardTitle className="text-base font-semibold">Equity-heavy business owner</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <p className="text-sm leading-6 text-muted-foreground">
+        Light ongoing taxation if wealth avoids land, but company profit above $1M is taxed before
+        the largest borrowing and inheritance events.
+      </p>
+    </CardContent>
+  </Card>
+</div>
+
+<Card className="my-10" size="sm" aria-labelledby="household-tax-chart-title">
+  <CardHeader>
+    <p className="eyebrow">Illustrative comparison</p>
+    <CardTitle id="household-tax-chart-title" className="mt-2 text-lg font-semibold leading-tight">
+      Recurring annual taxes, with company contribution shown separately
+    </CardTitle>
+    <CardDescription className="leading-6">
+      Recalculated NZD/year scenario comparing the current system with the proposed policy in Year
+      10, when the full 5% LVT applies. The richest-owner scenario includes company tax on $2M of
+      controlled-company profit. Blue bars are taxes; the green segment is a separate illustrative
+      company training contribution, not a tax. It assumes one 12-student cohort and approximately
+      NZ$40,000/year for supervised delivery, facilities, and administration. All scenarios exclude
+      inheritance and securities-backed borrowing.
+    </CardDescription>
+  </CardHeader>
+  <CardContent>
+    <HouseholdTaxChart client:load />
+    <HouseholdTaxBreakdownTable />
+  </CardContent>
+</Card>
+
+### The Poorest: Single Parent, Minimum/Low Wage, Renting, One Child
+
+<PolicyYearCarousel
+  client:load
+  ariaLabel="Policy timeline for the poorest household"
+  slides={[
+    {
+      year: 'Year 1',
+      points: [
+        'No income tax adds roughly $4-5k/year in take-home pay.',
+        "GST exemptions on groceries, clothing under $200, housing, and public transport cover the large majority of this household's actual spending, largely offsetting the higher 30% rate on everything else.",
+        'Renting, so no direct LVT exposure; landlord cost pass-through is capped at 5%/year and enforced against eviction gaming.',
+        'Net effect: modestly better off, close to break-even, assuming stable employment.',
+      ],
+    },
+    {
+      year: 'Year 5',
+      points: [
+        'If the household loses work or a member falls ill during the welfare transition, exposure to coverage gaps in the still-maturing mandatory insurance system is the most serious risk this group faces — more serious than any tax change.',
+        'If the child is aged 12+, the corporate training programme shifts a meaningful share of education costs off the household and the state, and exposes the child to real workplace experience across 12 industry rotations by 18.',
+      ],
+    },
+    {
+      year: 'Year 10',
+      points: [
+        'If consistently employed, this household is likely somewhat better off than under the current system, mainly due to the GST exemption design working as intended and no income tax on a modest wage.',
+        'Remains the most exposed group to any welfare-transition failure, and receives none of the benefit of the flat LVT, home-equity mechanism, or securities-backed loan tax, since they hold no land and no securities.',
+      ],
+    },
+  ]}
+/>
+
+### The Average: Dual-Income Household, Median-Value Home, Two Children
+
+<PolicyYearCarousel
+  client:load
+  ariaLabel="Policy timeline for the average household"
+  slides={[
+    {
+      year: 'Year 1',
+      points: [
+        'No income tax delivers a large, immediate take-home pay increase.',
+        'The new LVT bill starts at 1% of land value — on a median section (roughly $400-500k land value), approximately $4,000-5,000/year. Real and noticeable, but comfortably absorbed by the income-tax saving for most dual-income households, rather than the severe shock a flat 5% would have caused.',
+        'Local council rates fall for a 4-person household relative to the old capital-value system, since the new VI × occupancy formula is a smaller base than before.',
+      ],
+    },
+    {
+      year: 'Year 5',
+      points: [
+        'The LVT has risen on schedule to roughly 5% of land value, but if land values have softened over these years (as intended, via the tax itself and the home-equity mechanism releasing supply), the actual dollar bill is likely well below a naive 5x multiple of the year-1 figure — plausibly in the $12,000-18,000/year range rather than $20,000-25,000, though this depends on how much prices actually move.',
+        'Households in apartments or townhouses face a substantially smaller bill than standalone-house owners of similar total property value, since land value is apportioned across all units on the site — a real, growing incentive for this family to consider higher-density housing if the standalone-house LVT becomes a strain.',
+        "Children aged 12+ enter the corporate training rotation, gaining broad practical exposure and reducing the family's effective education-related costs and time burden.",
+      ],
+    },
+    {
+      year: 'Year 10',
+      points: [
+        'With four years at the full 5% rate behind them, the household has had a genuine multi-year runway to adjust — via income growth, downsizing, moving to higher-density housing, or drawing on the home-equity mechanism if needed — rather than facing an immediate, unplanned shock.',
+        "If land values and wages moved roughly as intended, this household is plausibly better off overall than under the current system: no income tax, a manageable land tax bill, cheaper non-exempt goods relative to income, and — if they moved toward denser housing — a materially lower LVT bill than a standalone-house equivalent. The phase-in is the main reason this persona's outcome looks meaningfully more positive than the flat-rate version of this system would have produced.",
+      ],
+    },
+  ]}
+/>
+
+### The Richest: Company Owner, Substantial Equity, High-Value Land, Minimal Salary
+
+<PolicyYearCarousel
+  client:load
+  ariaLabel="Policy timeline for the richest household"
+  slides={[
+    {
+      year: 'Year 1',
+      points: [
+        'No personal income tax is still a major advantage, but the reinstated corporate tax (0% to $1M, 25% above) now taxes the company\'s profit annually, at the point it is earned — regardless of whether this person ever takes salary, sells shares, or borrows against equity. This closes most of the "never technically realises income" strategy that the earlier version of the system left wide open.',
+        'If wealth is held substantially in company equity rather than land, the phased LVT (starting at 1%) does not apply to the shares themselves — but the underlying company profit those shares represent is now taxed at 25% above $1M, so the advantage of holding equity over land is meaningfully smaller than it was before corporate tax was reinstated.',
+        "If this individual also borrows against shares to fund lifestyle spending beyond what's already been earned and taxed at the company level, the securities-backed loan tax (50% above ~$2-3M drawn per year) applies on top — a real, if secondary, additional check.",
+      ],
+    },
+    {
+      year: 'Year 5',
+      points: [
+        'Some continued incentive to hold wealth in equity over land remains (equity avoids the LVT entirely; land does not), but this is now a much smaller distortion than before, since both forms of wealth face real, recurring taxation — company profit via corporate tax, land via LVT.',
+        'The fringe benefits tax, loan tax, and now corporate tax close the three main avoidance routes a wealthy owner previously had; the remaining gap is narrower and more specific — a company that retains profit rather than distributing it, reinvesting under the tax-free $1M threshold repeatedly across related entities, which is why the mandatory consolidation rule for related/commonly-owned companies matters.',
+      ],
+    },
+    {
+      year: 'Year 10',
+      points: [
+        'At death, the 75% inheritance tax and trust disclosure rules apply in full — this remains the single largest tax event this group is likely to ever face, and is the main mechanism actually reducing multi-generational wealth concentration for this persona.',
+        "Unlike the earlier version of the system, this persona has also been paying real, recurring corporate tax throughout the decade — the overall shape now looks much closer to a conventional tax system's treatment of a wealthy business owner (annual profit tax plus a large one-off event at death) rather than one where wealth passed through almost entirely untaxed until death.",
+      ],
+    },
+  ]}
+/>
+
+_Overall: reinstating corporate tax significantly narrows what was previously the system's largest fairness gap, and applying the direct-control test to entity consolidation (rather than ownership percentage alone) closes most of the remaining route to gaming the $1M threshold via artificially split companies. The richest still benefit from no personal income tax and from equity being untouched by the LVT, but company profit — where most real wealth in this group actually originates — is now taxed annually like anywhere else with a normal corporate tax regime, and genuinely cannot be split across shell entities to dodge it. The remaining edge this group holds is narrower still: patient equity holders in a single, real, controlled business who reinvest profit under the $1M threshold and never sell, and the smaller but real gap between equity and land as places to store wealth._
+
+<Separator className="my-16" />
+
+## Projected Effects on New Zealand
+
+<Card aria-labelledby="policy-timeline-title">
+  <CardHeader>
+    <p className="eyebrow">What changes when</p>
+    <CardTitle id="policy-timeline-title" className="mt-2 text-lg font-semibold leading-tight">
+      A deliberately staged transition
+    </CardTitle>
+  </CardHeader>
+  <CardContent>
+    <ol className="grid gap-4 sm:grid-cols-3">
+      <li className="grid gap-2 border-l-2 border-primary pl-4">
+        <Badge variant="secondary" className="w-fit font-heading font-semibold">
+          Year 1-2
+        </Badge>
+        <span className="text-sm leading-6 text-muted-foreground">
+          Take-home pay rises; the LVT starts at 1%; first migration and insurance pilots begin.
+        </span>
+      </li>
+      <li className="grid gap-2 border-l-2 border-primary pl-4">
+        <Badge variant="secondary" className="w-fit font-heading font-semibold">
+          Year 3-5
+        </Badge>
+        <span className="text-sm leading-6 text-muted-foreground">
+          Land values, housing choices, training, and the equity market absorb the adjustment.
+        </span>
+      </li>
+      <li className="grid gap-2 border-l-2 border-primary pl-4">
+        <Badge variant="secondary" className="w-fit font-heading font-semibold">
+          Year 6-10
+        </Badge>
+        <span className="text-sm leading-6 text-muted-foreground">
+          The full LVT and inheritance effects reveal whether the model actually balances.
+        </span>
+      </li>
+    </ol>
+  </CardContent>
+</Card>
+
+<PolicyYearCarousel
+  client:load
+  ariaLabel="Projected effects timeline for New Zealand"
+  slides={[
+    {
+      year: 'Year 1–2',
+      points: [
+        'Take-home pay rises immediately for wage earners; businesses retain profit up to $1M, with profit above that taxed at 25%.',
+        'The LVT begins at a modest 1%, giving most households a manageable introduction rather than an immediate shock — a meaningfully softer landing than an immediate flat 5% would have produced.',
+        'The home-equity/reversion mechanism sees measured early uptake, mainly among the elderly and genuinely cash-constrained households it was designed for, rather than a rapid, system-wide rush — the phase-in buys time for this market to mature before it needs to bear real weight.',
+        'Capital and talent begin relocating or restructuring ahead of full implementation, particularly wealth held in land shifting toward equity and other non-LVT assets.',
+        'Mining sector investment stalls; underground construction slows; doctor fast-track pilot begins processing its first cohort.',
+      ],
+    },
+    {
+      year: 'Year 3–5',
+      points: [
+        'As the LVT climbs through 2-4% on schedule, land values are expected to soften gradually rather than collapse — the equity-securitisation market has real time (now genuinely years, not months) to mature before it needs to bear significant weight, and standalone-house owners begin visibly shifting toward higher-density housing given the much lower apportioned LVT apartments face.',
+        'The corporate 12-18 training programme and overseas study exchange begin measurably reducing education costs and reshaping the youth-to-workforce pipeline.',
+        'Fast-tracked skilled migration (doctors, then engineers) begins measurably easing sector-specific shortages, assuming exam capacity scaled successfully.',
+        'Regional mining-town economies contract with no fast replacement industry.',
+      ],
+    },
+    {
+      year: 'Year 6–10',
+      points: [
+        'A recognisable pattern emerges: a gradual, multi-year shift of housing wealth toward institutional co-ownership via the home-equity securitisation market, alongside a genuine, organic shift toward apartments and townhouses given their much lighter apportioned LVT — both moving at a pace the phase-in made manageable rather than forced.',
+        'Zero personal income tax, combined with a competitive, business-friendly corporate tax structure (0% to $1M profit), if well marketed, has drawn a measurable inflow of mobile high earners, remote workers, and relocating businesses — the clearest sign of whether the growth strategy is working.',
+        'Inheritance tax effects compound generationally, meaningfully reducing multi-generational wealth concentration.',
+        "Whether the state's books balance by year 10 still depends heavily on how land values actually respond over the phase-in — but the 5-year runway gives this the best realistic chance of landing as a durable, well-functioning revenue engine rather than a shock the system has to walk back under pressure.",
+      ],
+    },
+  ]}
+/>
+
+<Separator className="my-16" />
+
+## Key Open Questions and Risks
+
+- Whether the 5% destination rate remains fiscally and socially sustainable once the phase-in completes in year 6, or whether a data-triggered pause (delaying the final step if land values haven't softened materially) should be built into the schedule from the outset.
+- Whether the reinstated corporate tax's $1M threshold and consolidation rule are robust enough against entity-splitting, and whether a capital gains tax on share sales is still worth adding to close the narrower remaining gap (patient, low-distribution equity holders who reinvest under the threshold and never sell).
+- Whether occupancy-based local rates can be reliably verified given NZ's current lack of an annual household-occupancy registration system.
+- What government capacity and capital commitment would be required if the state chooses to run mining operations itself following the effective exit of private operators.
+- Whether foreign participation in securitised home-equity instruments should be limited to certain tranches, reserving others for domestic retirement funds (KiwiSaver).
+- How gig-economy work is treated under the direct-control employee test, still a genuinely unresolved edge case internationally.
+  Prepared as a summary of an extended policy design discussion. Figures are order-of-magnitude illustrations, not outputs of a validated macroeconomic model. This document does not constitute an economic, legal, or financial recommendation.

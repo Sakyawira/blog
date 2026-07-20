@@ -1,0 +1,69 @@
+---
+import { getCollection } from 'astro:content';
+import { ArrowRight, Rss } from '@lucide/astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import PostCard from '@/components/PostCard.astro';
+
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const posts = (await getCollection('blog', ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+const [featured, ...recentPosts] = posts;
+---
+
+<BlogLayout>
+  <section
+    class="mx-auto grid w-full max-w-6xl gap-12 px-6 pb-20 pt-12 lg:grid-cols-[1.1fr_0.9fr] lg:items-end lg:pb-28 lg:pt-20"
+  >
+    <div>
+      <p class="eyebrow">A personal archive of useful curiosities</p>
+      <h1
+        class="mt-6 max-w-4xl font-heading text-6xl font-semibold leading-[0.92] tracking-tight text-foreground sm:text-8xl"
+      >
+        Thinking out loud,<br /><span class="text-primary">one note at a time.</span>
+      </h1>
+    </div>
+    <div class="max-w-md border-l-2 border-primary pl-6 lg:mb-2">
+      <p class="text-lg leading-8 text-muted-foreground">
+        Sakya Idea Corner is a quiet place for essays about software, design, learning, and the decisions
+        hiding underneath the finished work.
+      </p>
+      <div class="mt-6 flex flex-wrap items-center gap-3 text-sm font-semibold">
+        <a class="inline-flex items-center gap-2 text-primary hover:underline" href={`${base}writing/`}
+          >Browse all writing <ArrowRight class="size-4" /></a
+        >
+        <a
+          class="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground"
+          href={`${base}rss.xml`}><Rss class="size-4" /> RSS</a
+        >
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto w-full max-w-6xl px-6 pb-20" aria-labelledby="featured-heading">
+    <div class="mb-5 flex items-baseline justify-between gap-4">
+      <h2 id="featured-heading" class="eyebrow">Latest dispatch</h2>
+      <span class="text-sm text-muted-foreground"
+        >{posts.length} {posts.length === 1 ? 'note' : 'notes'}</span
+      >
+    </div>
+    {featured && <PostCard post={featured} featured />}
+  </section>
+
+  {
+    recentPosts.length > 0 && (
+      <section class="mx-auto w-full max-w-6xl px-6 pb-24" aria-labelledby="recent-heading">
+        <h2 id="recent-heading" class="eyebrow mb-2">
+          Earlier notes
+        </h2>
+        <div class="grid gap-x-10 md:grid-cols-2">
+          {recentPosts.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+</BlogLayout>

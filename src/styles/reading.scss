@@ -1,0 +1,113 @@
+$reading-width: 44rem;
+
+.article-layout {
+  display: grid;
+  gap: 3rem;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.article-main,
+.article-toc {
+  min-width: 0;
+}
+
+.article-body {
+  max-width: $reading-width;
+
+  :is(h2, h3, h4) {
+    scroll-margin-top: 7rem;
+  }
+
+  & > :first-child {
+    margin-top: 0;
+  }
+
+  & > :last-child {
+    margin-bottom: 0;
+  }
+
+  blockquote {
+    border-left: 3px solid var(--primary);
+    color: var(--muted-foreground);
+    font-family: var(--font-heading);
+    font-size: 1.35em;
+    font-style: italic;
+  }
+
+  code:not(pre code) {
+    border: 1px solid var(--border);
+    border-radius: 0.25rem;
+    background: color-mix(in srgb, var(--muted) 72%, transparent);
+    padding: 0.12em 0.3em;
+  }
+}
+
+.article-toc {
+  order: -1;
+  align-self: start;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 1.25rem;
+}
+
+.article-toc-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.article-toc-title {
+  height: 1.5rem;
+  background: var(--background);
+  color: var(--muted-foreground);
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  margin: 0;
+}
+
+.article-toc-nav a {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+  line-height: 1.35;
+  text-decoration: none;
+  transition: color 150ms ease;
+}
+
+.article-toc-nav a[data-depth='3'] {
+  padding-inline-start: 1rem;
+}
+
+.article-toc-nav a:hover,
+.article-toc-nav a[data-active='true'] {
+  color: var(--foreground);
+}
+
+.article-toc-nav a[data-active='true'] {
+  font-weight: 500;
+}
+
+@media (min-width: 1024px) {
+  .article-layout {
+    grid-template-columns: minmax(0, 1fr);
+    justify-content: start;
+    gap: 0;
+  }
+
+  .article-toc {
+    position: fixed;
+    top: 7rem;
+    right: max(1.5rem, calc((100vw - 72rem) / 2 + 1rem));
+    width: 15rem;
+    order: 0;
+    max-height: calc(100vh - 7rem);
+    overflow-y: auto;
+    border-block: 0;
+    padding: 0;
+    scrollbar-width: thin;
+  }
+
+  .article-toc-nav {
+    gap: 0.5rem;
+  }
+}

@@ -1,0 +1,128 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import { ArrowLeft } from '@lucide/astro';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { formatDate } from '@/lib/format';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => !data.draft);
+
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: CollectionEntry<'blog'>;
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+const navigationHeadings = headings.filter((heading) => heading.depth >= 2 && heading.depth <= 3);
+---
+
+<BlogLayout title={post.data.title} description={post.data.description}>
+  <article class="mx-auto w-full max-w-6xl px-6 pb-24 pt-12 lg:pt-20">
+    <a
+      class="mb-12 inline-flex items-center gap-2 text-sm font-semibold text-muted-foreground transition-colors hover:text-primary"
+      href={`${base}writing/`}><ArrowLeft class="size-4" /> Back to writing</a
+    >
+    <header class="max-w-3xl">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+        <time datetime={post.data.pubDate.toISOString()}>{formatDate(post.data.pubDate)}</time>
+        {
+          post.data.readingTime && (
+            <>
+              <>
+                <span aria-hidden="true">/</span>
+                <span>{post.data.readingTime}</span>
+              </>
+            </>
+          )
+        }
+      </div>
+      <h1
+        class="mt-5 font-heading text-5xl font-semibold leading-[0.98] tracking-tight sm:text-7xl"
+      >
+        {post.data.title}
+      </h1>
+      <p class="mt-6 text-xl leading-8 text-muted-foreground">{post.data.description}</p>
+      <div class="mt-7 flex flex-wrap gap-2">
+        {
+          post.data.tags.map((tag) => (
+            <span class="rounded-md border border-border bg-secondary px-3 py-1 text-xs font-medium text-secondary-foreground">
+              #{tag}
+            </span>
+          ))
+        }
+      </div>
+    </header>
+
+    <div class="article-layout mt-16">
+      <div class="article-main">
+        <div class="article-body typeset typeset-reading">
+          <Content />
+        </div>
+      </div>
+      {
+        navigationHeadings.length > 0 && (
+          <aside class="article-toc" aria-label="On This Page">
+            <nav class="article-toc-nav" data-article-toc>
+              <p class="article-toc-title">On This Page</p>
+              {navigationHeadings.map((heading) => (
+                <a data-depth={heading.depth} href={`#${heading.slug}`}>
+                  {heading.text}
+                </a>
+              ))}
+            </nav>
+          </aside>
+        )
+      }
+    </div>
+  </article>
+</BlogLayout>
+
+<script>
+  const toc = document.querySelector('[data-article-toc]');
+
+  if (toc) {
+    const links = Array.from(toc.querySelectorAll('a'));
+    const sections = links
+      .map((link) => document.getElementById(link.getAttribute('href')?.slice(1) ?? ''))
+      .filter((section): section is HTMLElement => section instanceof HTMLElement);
+
+    const setActiveLink = () => {
+      const activeIndex = sections.reduce((currentIndex, section, index) => {
+        return section.getBoundingClientRect().top <= 136 ? index : currentIndex;
+      }, 0);
+
+      links.forEach((link, index) => {
+        const isActive = index === activeIndex;
+        link.toggleAttribute('aria-current', isActive);
+        link.dataset.active = String(isActive);
+      });
+    };
+
+    links.forEach((link) => {
+      link.addEventListener('click', (event) => {
+        const section = document.getElementById(link.getAttribute('href')?.slice(1) ?? '');
+
+        if (!section) return;
+
+        event.preventDefault();
+        history.pushState(null, '', link.getAttribute('href'));
+        requestAnimationFrame(() => {
+          section.scrollIntoView({ behavior: 'auto', block: 'start' });
+          setActiveLink();
+        });
+      });
+    });
+
+    setActiveLink();
+    window.addEventListener('scroll', setActiveLink, { passive: true });
+  }
+</script>

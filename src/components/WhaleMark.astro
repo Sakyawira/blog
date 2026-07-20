@@ -1,0 +1,109 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+---
+
+<span class:list={['whale-mark', className]} aria-hidden="true">
+  <img
+    class="whale-mark__image"
+    src={`${base}openmoji-spouting-whale.svg`}
+    alt=""
+    draggable="false"
+    width="72"
+    height="72"
+  />
+  <svg class="whale-mark__light-spout" viewBox="0 0 72 72" aria-hidden="true">
+    <path
+      class="whale-mark__light-spout-path whale-mark__light-spout-path--left"
+      d="m19.455 13.84c-0.60501-0.05852-1.225 0.02574-1.8105 0.25195-1.1711 0.45243-2.2349 1.3801-3.2305 2.6895a1.0001 1.0001 0 1 0 1.5918 1.209c0.84851-1.1159 1.687-1.7735 2.3594-2.0332 0.67236-0.25974 1.1465-0.21155 1.7051 0.1582 1.1171 0.73951 2.4316 3.3282 2.8516 8a1.0001 1.0001 0 1 0 1.992-0.177c-0.44453-4.9449-1.6394-8.1008-3.7383-9.4902-0.52471-0.34735-1.1157-0.5489-1.7207-0.60742z"
+    ></path>
+    <path
+      class="whale-mark__light-spout-path whale-mark__light-spout-path--right"
+      d="m31.482 12.607c-0.58064-0.042-1.1664 0.02885-1.7383 0.22852-2.2876 0.79867-3.91 3.4604-4.0977 7.8066a1.0001 1.0001 0 1 0 1.998 0.08594c0.16828-3.8968 1.521-5.5714 2.7598-6.0039 1.2387-0.43247 2.7986 0.18985 3.9043 1.9863a1.0001 1.0001 0 1 0 1.7031-1.0488c-1.095-1.78-2.787-2.928-4.529-3.054z"
+    ></path>
+    <path
+      class="whale-mark__light-spout-path whale-mark__light-spout-path--center"
+      d="m23.621 9.8984a1.0001 1.0001 0 0 0-0.9375 1.3086c0.23434 0.75994 0.47877 1.3276 0.52344 2.291a1.0001 1.0001 0 1 0 1.998-0.0918c-0.05933-1.2798-0.41693-2.1587-0.61133-2.7891a1.0001 1.0001 0 0 0-0.973-0.7186z"
+    ></path>
+  </svg>
+</span>
+
+<style>
+  .whale-mark {
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    border-radius: 9999px;
+    background-color: var(--foreground);
+    padding: 0.15rem;
+  }
+
+  .whale-mark__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .whale-mark__light-spout {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+  }
+
+  .whale-mark__light-spout-path {
+    fill: var(--background);
+  }
+
+  :global(.dark) .whale-mark__light-spout {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .whale-mark__light-spout-path {
+      clip-path: inset(100% 0 0 0);
+    }
+
+    .whale-mark__light-spout-path--left {
+      animation: whale-mark-light-spout 3.2s ease-in-out infinite;
+    }
+
+    .whale-mark__light-spout-path--right {
+      animation: whale-mark-light-spout 3.2s ease-in-out 180ms infinite;
+    }
+
+    .whale-mark__light-spout-path--center {
+      animation: whale-mark-light-spout 3.2s ease-in-out 360ms infinite;
+    }
+
+    @keyframes whale-mark-light-spout {
+      0%,
+      12% {
+        clip-path: inset(100% 0 0 0);
+        opacity: 0;
+      }
+      42%,
+      84% {
+        clip-path: inset(0 0 0 0);
+        opacity: 1;
+      }
+      94% {
+        clip-path: inset(58% 0 0 0);
+        opacity: 0.75;
+      }
+      100% {
+        clip-path: inset(100% 0 0 0);
+        opacity: 0;
+      }
+    }
+  }
+</style>
