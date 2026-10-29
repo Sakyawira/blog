@@ -2,6 +2,7 @@
 title: 'From AI Coding to Accountable Engineering'
 description: 'Ideas from Agentic Engineering Day NZ on engineering judgment, agent security, evaluations, software factories, and the research behind them.'
 pubDate: 2026-10-29
+updatedDate: 2026-10-29
 tags:
   - software-engineering
   - ai
@@ -12,22 +13,22 @@ draft: false
 
 ## Executive summary
 
-The conference findings fall into two categories: **software engineering work and delivery**, and **production agent technology**.
+The eight findings connect **software engineering work and delivery** with **reliability, security and accountability**.
 
 1. **The engineer's job shifts towards directing and verifying work.** That still requires technical judgment and system understanding, not passive approval.
 2. **More generated code does not automatically mean more delivered value.** Integration, review and production operations can become the limiting factors.
 3. **Modular architecture and clear decisions protect delivery.** Coherent boundaries matter more as code generation accelerates.
-4. **Software factories need an engineered environment.** Durable workflows, useful checks, recovery and human escalation matter more than agent count.
-5. **Instructions and permission are different things.** Desired behaviour belongs in guidance; actual authority must be enforced independently.
-6. **Observability records the workflow.** Traces help investigate actions and failures without revealing the model's true internal reasoning.
-7. **Evaluation measures behaviour against criteria.** Neither a high score nor another agent's approval guarantees correctness.
-8. **External actions need legitimate business contracts.** Identity, bounded delegation, spending limits, receipts and safe retries cannot be solved by a prompt alone.
+4. **Instructions and permission are different things.** Desired behaviour belongs in guidance; actual authority must be enforced independently.
+5. **Observability records the workflow.** Traces help investigate actions and failures; generated explanations still need scrutiny.
+6. **Evaluation measures behaviour against criteria.** Neither a high score nor another agent's approval guarantees correctness.
+7. **External actions need legitimate business contracts.** Identity, bounded delegation, spending limits, receipts and safe retries cannot be solved by a prompt alone.
+8. **Software factories make workflow and environment design central.** The practical questions are durability, validation, recovery and oversight—not simply agent count.
 
 A separate section covers **Mic Neale’s Mesh LLM and shared-compute inference**.
 
 ## Where these ideas come from
 
-The starting point is **Agentic Engineering Day NZ**, held at the **Aotea Centre in Auckland on 22 October 2026**. The conference brought together engineers, architects and practitioners working on AI-assisted software delivery and production agents. The [official programme](https://www.agenticengineering.day/) provides the speaker names, affiliations and session titles used here.
+The starting point is **Agentic Engineering Day NZ**, held at the **Aotea Centre in Auckland on 22 October 2026**. The conference brought together engineers, architects and practitioners working on AI-assisted software delivery and production agents. The [official programme](https://www.agenticengineering.day/) provides the speaker names, affiliations and session titles used here. [1](#ref-1)
 
 ### Speakers and their topics
 
@@ -49,59 +50,114 @@ The starting point is **Agentic Engineering Day NZ**, held at the **Aotea Centre
 
 ### Research and supporting sources
 
-Supporting sources include the speakers' publications and project documentation, studies of automation, motivation and developer productivity, and research on evaluation and prompt injection. **OWASP, NIST, OpenTelemetry, Microsoft and AWS** provide security and implementation guidance. Publication types are labelled in the references; the closing governance discussion also draws on Mohtasebi and Wang's public session description.
+The eight findings are my thematic organisation of notes from the conference talks, not a framework presented by one speaker. Supporting sources include the speakers' publications and project documentation, studies of automation, motivation and developer productivity, and research on evaluation and prompt injection. **OWASP, NIST, OpenTelemetry, Microsoft and AWS** provide security and implementation guidance. Publication types are labelled in the references; the closing governance discussion also draws on Mohtasebi and Wang's public session description.
 
-## Software engineering work and delivery
+## Eight findings
 
 ### 1. The engineer becomes a supervisor—but must remain an engineer
 
 **Speakers:** Annie Vella and David Curlewis.
 
-Vella describes **supervisory engineering work** as directing AI, evaluating its output and correcting it when necessary. Curlewis adds that coordinating agents is not the same as managing people: it does not involve the same relationships, career responsibilities or consequences for employees. A better analogy is often technical leadership—setting direction, understanding systems and applying judgment.
+Vella describes **supervisory engineering work** as directing AI, evaluating its output and correcting it when necessary. [2](#ref-2) Curlewis argues that coordinating agents is closer to technical leadership than people management: it does not involve the same relationships, career responsibilities or consequences for employees.
 
 Engineers may write less code while doing more specification, verification, integration and exception handling.
 
 **What research supports:** Vella and Kelly Blincoe's 2026 longitudinal preprint used two questionnaires six months apart: 158 eligible participants initially, 101 later, with a matched cohort of 95. Its abstract reports that 82% perceived spending less time writing code. Perceived productivity improvement remained at 84% across the two time points, while the proportion of matched participants reporting a worsening in at least one developer-experience dimension increased from 14% to 27%. These are self-reported experiences, not a causal measure of productivity. [3](#ref-3)
 
-The older automation literature explains why this matters. Bainbridge's _Ironies of Automation_ describes how automation can leave humans with rare, difficult intervention tasks while reducing practice in the skills needed to perform them. Endsley and Kiris experimentally connected increased automation with poorer situation awareness and slower manual decisions after automation failure, in a navigation task. This is strong evidence about supervisory control; transferring the exact magnitude to software engineering would require additional research. [4](#ref-4), [5](#ref-5)
+The older automation literature offers a related perspective. Bainbridge's _Ironies of Automation_ describes how automation can leave humans with rare, difficult intervention tasks while reducing practice in the skills needed to perform them. Endsley and Kiris experimentally connected increased automation with poorer situation awareness and slower manual decisions after automation failure, in a navigation task. That experiment studied navigation, not software development; it does not establish the size of any corresponding effect on coding. [4](#ref-4), [5](#ref-5)
 
-Curlewis's concern about motivation also fits established self-determination theory, which emphasises autonomy, competence and relatedness. It offers a useful explanatory framework, not direct proof that a particular AI workflow causes engineer turnover. [6](#ref-6)
+**My interpretation:** Ryan and Deci's self-determination theory—autonomy, competence and relatedness—offers one way to think about Curlewis's motivation argument. This is a connection I am drawing, not evidence that an AI workflow causes engineer turnover. [6](#ref-6)
 
-**In practice:** preserve learning, debugging and architecture work so engineers can explain the system and take over when it fails.
+**My recommendation:** preserve learning, debugging and architecture work so engineers can explain the system and take over when it fails.
 
 ### 2. Faster typing moves the bottleneck; it does not remove it
 
 **Speaker:** Randy Shoup.
 
-Shoup separates the **inner loop**—local implementation, testing and debugging—from the **outer loop**—integration, validation and production delivery. His central argument is sensible: increasing the rate of code proposals can overload downstream stages unless the delivery system improves too.
+Shoup separates the **inner loop**—local implementation, testing and debugging—from the **outer loop**—integration, validation and production delivery. He argues that increasing the rate of code proposals can overload downstream stages unless the delivery system improves too.
 
-A simple example makes this concrete. If an agent produces ten changes an hour but your team can safely validate two, generating twenty changes an hour mostly increases queues and rework. The improvement must reach the limiting stage, not just the most visible activity.
+**Hypothetical illustration:** if an agent proposes ten changes an hour but a team can validate only two, increasing generation to twenty does not increase validation capacity. These numbers illustrate the bottleneck; they are not conference data.
 
 **What research supports:** productivity is highly context-dependent. Peng and colleagues reported that an AI-assisted group completed a specific JavaScript HTTP-server task 55.8% faster than a control group. In contrast, Becker and colleagues' 2025 randomized study of 16 experienced open-source developers completing 246 tasks in familiar, mature projects found that allowing early-2025 AI tools increased completion time by 19%. Both are cited here as preprints; the tasks, users, tools and settings differ substantially. Neither result establishes how your team will perform with October-2026 tools. [8](#ref-8), [9](#ref-9)
 
 The studies do not support a universal productivity gain or slowdown. Shoup's CircleCI observations similarly describe a delivery context, not a guaranteed multiplier.
 
-**In practice:** measure time to an accepted result, including preparation, review, CI failures and rework—not generated lines or PR counts.
+**My recommendation:** measure time to an accepted result, including preparation, review, CI failures and rework—not generated lines or PR counts.
 
 ### 3. Modularity protects both comprehension and delivery
 
-**Speakers:** Randy Shoup; Amir Mohtasebi and Brian Wang in the partial closing session.
+**Speakers:** Randy Shoup, Amir Mohtasebi and Brian Wang.
 
-When agents can produce large volumes of code, coherent boundaries become more valuable. A payment component, content-publishing component or identity component should have a clear contract and an owner. The rest of the system should not need to understand every internal detail to use it safely.
+Shoup argues that modular boundaries become more valuable as code generation accelerates. A payment component, content-publishing component or identity component should have a clear contract and an owner. The rest of the system should not need to understand every internal detail to use it safely.
 
 A modular monolith can provide these boundaries; microservices are not a requirement.
 
 **What research supports:** Parnas's classic _Communications of the ACM_ paper treats modularization as a way to improve flexibility and comprehensibility and potentially shorten development time. The benefit depends on how the system is divided, not simply on the number of modules. [7](#ref-7)
 
-Trade Me's approach combines distributed architectural participation, an advice process, architecture decision records and a small set of guardrails. The public session description also describes an agent that flags drift from recorded decisions. [25](#ref-25)
+Mohtasebi and Wang describe Trade Me's distributed architectural participation, advice process, architecture decision records and guardrails. Their public session description also proposes using an agent to flag drift from recorded decisions. [25](#ref-25)
 
-**In practice:** record decisions and their reasons, and use drift detection to start an architectural conversation rather than automatically block delivery.
+**My recommendation:** record decisions and their reasons, and use drift detection to start an architectural conversation rather than automatically block delivery.
 
-### 4. Software factories work through environmental design, not wishful autonomy
+### 4. Intent is not policy: make authority independent of the model
+
+**Speakers:** Pauline Kelly, Everett Toews, Mal Curtis and Darshit Pandya.
+
+**Repository instructions guide behaviour; runtime authorization determines what actions are permitted.** Pandya's presentation separates those responsibilities, and OWASP recommends enforcing least privilege outside the model. [24](#ref-24), [12](#ref-12)
+
+Kelly and Toews place security throughout the development lifecycle. AWS's foundational AI-DLC description uses inception, construction and operations, with human validation across those phases. [16](#ref-16) NIST's SSDF community profile likewise describes AI-specific security practices across the lifecycle. [23](#ref-23)
+
+Pandya's two-layer contract separates:
+
+- **Guidance:** repository context, conventions, desired behaviour and instructions such as those in `AGENTS.md`.
+- **Enforcement:** the runtime's decision about which authenticated principal may invoke which operation, against which resource, with which arguments.
+
+His examples distinguish **discovery** from **invocation**. Hiding a production tool from a tool list reduces visibility; it is not sufficient if a client can construct a direct call. Likewise, a shared `deploy` tool can remain visible for legitimate staging deployments while independently rejecting the same operation against production. [24](#ref-24)
+
+Greshake and colleagues demonstrated indirect prompt injection through retrieved content. OWASP recommends least privilege, separation of untrusted content, deterministic validation, approval for high-risk operations and adversarial testing. [11](#ref-11), [12](#ref-12)
+
+My notes from [Curtis's talk](https://www.agenticengineering.day/speakers/mal-curtis) record five proposed gates: input, dialogue, retrieval, execution and output. This is a speaker recommendation, not a measured guarantee that the arrangement prevents injection. OWASP also describes layered safeguards as mitigations rather than foolproof prevention. [12](#ref-12)
+
+**My recommendation:** bind identity and tenant scope outside model-generated arguments, validate permissions at execution time and use narrow, short-lived credentials. Test direct calls to hidden tools, forbidden arguments and policy-service outages, including fail-closed behaviour for high-risk operations.
+
+### 5. Observability records the workflow
+
+**Speakers:** Jerome Brown and Jyothi Madanlal.
+
+Brown asks how engineers can investigate an agent's actions when something goes wrong. He advocates recording requests, model versions, retrieved information, tool calls, timings, errors and results so engineers can investigate failed dependencies, tool selection and policy retrieval.
+
+Microsoft Agent Framework documents OpenTelemetry integration, model/tool spans and token/duration metrics. OpenTelemetry's GenAI conventions cover spans, metrics and events, including MCP-related conventions. Madanlal's CloudWatch Omni demonstration brings tracing, datasets and evaluation into a connected development workflow; official documentation confirms these capabilities. [14](#ref-14), [15](#ref-15), [17](#ref-17)
+
+In experiments with the models and tasks they studied, Turpin and colleagues found that chain-of-thought explanations could omit influences on an answer and rationalize biased responses. This cautions against assuming that reasoning text in a trace faithfully explains every model decision; it does not establish that every explanation is false. [13](#ref-13)
+
+**Technical guidance:** Microsoft identifies prompts, responses, tool arguments and results as sensitive telemetry. Its documentation calls for appropriate protection and retention policies when collecting that content. [14](#ref-14)
+
+### 6. Evaluation measures behaviour against defined criteria
+
+**Speaker:** Jyothi Madanlal.
+
+Evaluation asks a different question from observability: **was the behaviour acceptable?** Madanlal's evaluation-driven approach examines the final output, the trajectory of tool use and system health. An apparently good answer is not enough if the agent accessed the wrong user's information, chose the wrong operation or kept retrying without a useful outcome.
+
+Madanlal proposes a repeated loop: define success, run representative cases, investigate failures and improve the system. Production failures can become regression cases, and changes to prompts, models or tools should prompt relevant evaluations. AWS's documented evaluation workflow follows that pattern. [17](#ref-17)
+
+Zheng and colleagues studied LLM judges scoring open-ended chat responses against human preferences and documented position, verbosity and self-enhancement biases. That finding concerns the tested judging setup, not a direct experiment on the correctness of coding-agent reviews. [10](#ref-10)
+
+**My recommendation:** calibrate rubrics against human-reviewed examples rather than treating a score such as 0.85 as a calibrated 85% probability of correctness. Use model reviews alongside deterministic checks and human review, not as a correctness certificate. Keep held-out cases, and prevent real side effects during shadow trials.
+
+### 7. Agents need legitimate contracts with the outside world
+
+**Speaker:** BMK Lakshminarayanan.
+
+**Speaker proposal:** my notes from [Lakshminarayanan's talk](https://www.agenticengineering.day/speakers/bmk-lakshminarayanan) identify six components: identity, inbox, wallet, tools, memory and audit. His booking example asks how a business verifies delegated authority, spending limits and whether an action actually completed after a timeout.
+
+**Technical context:** AWS's reliability guidance describes idempotency tokens as a way to retry mutating requests without duplicate records or side effects. This is a specific mechanism supporting the retry concern, not a validation of the entire six-component framework. [29](#ref-29)
+
+**My recommendation:** use supported APIs and explicit business authorization, with bounded delegation, receipts and dispute handling. Respect access restrictions rather than bypassing them.
+
+### 8. Software factories make workflow and environment design central
 
 **Speakers:** Igor Costa and Josh Wulf.
 
-Costa's **Autohand AI** presentation focused on connecting coding agents, model routing, memory, tools and review into a software-development workflow. In a separate talk, Wulf described **Nano BPM** and used **software gardening** to explain the work of maintaining the environment in which code grows. These workflow-design lessons call for:
+Costa's **Autohand AI** presentation focused on connecting coding agents, model routing, memory, tools and review into a software-development workflow. In a separate talk, Wulf described **Nano BPM** and used **software gardening** to explain the work of maintaining the environment in which code grows. My synthesis of their workflow-design recommendations is:
 
 - well-scoped work and clear interfaces;
 - durable state transitions and bounded retry loops;
@@ -113,79 +169,13 @@ Wulf's Nano BPM project provides durable, provider-agnostic workflows and is use
 
 For **Autohand Code CLI** specifically, its `COMMERCIAL.md` states a commercial-licence requirement for organisations with annual recurring revenue above **US$5 million**. Review the applicable version and terms with procurement/legal rather than assuming downloadable software permits unrestricted company use. [22](#ref-22)
 
-Reported throughput gains are case experiences, not general causal estimates. More agents can also multiply correlated mistakes, merge conflicts, cost and architectural erosion.
+**Speaker-reported result:** Wulf's conference biography says his team produces ten times its previous output. It presents this as a team experience, without a controlled comparison or measurement methodology on the page. [27](#ref-27)
 
-Formal methods and tests provide evidence for specified properties; they do not establish unspecified business intent or eliminate environment failures.
+**Opinion:** I would not extrapolate that result to other teams or assume a larger agent fleet is more productive. Shared mistakes, merge conflicts, coordination costs and architectural drift are risks I would investigate—not measured effects established by the studies cited here.
 
-**In practice:** define stopping conditions, escalation evidence and a recovery owner before increasing autonomy.
+**Technical background:** AWS's Nitro Isolation Engine explanation distinguishes proving specified properties across a formal model's possible states and inputs from testing selected scenarios. The assurance concerns the properties and scope actually verified or tested. [28](#ref-28)
 
-## Production agent technology
-
-Production agents need distinct controls for behaviour, authority and operational ownership:
-
-| Capability     | Main question                           | Example                                                                            |
-| -------------- | --------------------------------------- | ---------------------------------------------------------------------------------- |
-| Observability  | What happened?                          | Which model ran, which tool was called, how long it took, and what failed          |
-| Evaluation     | Was that behaviour acceptable?          | Did the answer match evidence, did the right tool run, and was the outcome useful? |
-| Enforcement    | Was the action allowed?                 | Was this identity permitted to publish this content or access this tenant?         |
-| Accountability | Who owns the consequences and response? | Who sets the risk policy, handles incidents and corrects the system?               |
-
-### 5. Intent is not policy: make authority independent of the model
-
-**Speakers:** Pauline Kelly, Everett Toews, Mal Curtis and Darshit Pandya.
-
-**A prompt can influence an agent's choices. It cannot reliably make an unauthorised action impossible.**
-
-Kelly and Toews place security throughout the development lifecycle. AWS's foundational AI-DLC description uses inception, construction and operations, with human validation across those phases. [16](#ref-16)
-
-Pandya's two-layer contract separates:
-
-- **Guidance:** repository context, conventions, desired behaviour and instructions such as those in `AGENTS.md`.
-- **Enforcement:** the runtime's decision about which authenticated principal may invoke which operation, against which resource, with which arguments.
-
-His examples distinguish **discovery** from **invocation**. Hiding a production tool from a tool list reduces visibility; it is not sufficient if a client can construct a direct call. Likewise, a shared `deploy` tool can remain visible for legitimate staging deployments while independently rejecting the same operation against production. [24](#ref-24)
-
-Greshake and colleagues demonstrated indirect prompt injection through retrieved content. OWASP recommends least privilege, separation of untrusted content, deterministic validation, approval for high-risk operations and adversarial testing. [11](#ref-11), [12](#ref-12)
-
-Curtis's input, dialogue, retrieval, execution and output gates offer a layered-defence checklist. They mitigate instruction/data confusion; they do not guarantee prevention or establish storytelling as its universal cause.
-
-**In practice:** bind identity and tenant scope outside model-generated arguments, validate permissions at execution time and use narrow, short-lived credentials. Test direct calls to hidden tools, forbidden arguments and policy-service outages, including fail-closed behaviour for high-risk operations.
-
-### 6. Observability makes the workflow legible—not the model's mind
-
-**Speakers:** Jerome Brown and Jyothi Madanlal.
-
-Brown's central question is operational: why did the agent do what it did, and how can we investigate when something goes wrong? Useful observability records the workflow around the model—requests, model versions, retrieved information, tool calls, timings, errors and results. It lets engineers locate a failed dependency, an incorrect tool selection or an outdated policy rather than treating every failure as a mysterious model problem.
-
-Microsoft Agent Framework documents OpenTelemetry integration, model/tool spans and token/duration metrics. OpenTelemetry's GenAI conventions cover spans, metrics and events, including MCP-related conventions. Madanlal's CloudWatch Omni demonstration brings tracing, datasets and evaluation into a connected development workflow; official documentation confirms these capabilities. [14](#ref-14), [15](#ref-15), [17](#ref-17)
-
-Turpin and colleagues showed that chain-of-thought explanations can rationalize an answer without faithfully describing what influenced it. Traces therefore record observable behaviour, not the model's true decision process. [13](#ref-13)
-
-Microsoft treats prompts, responses, tool arguments and results as sensitive. Collect only the evidence needed for investigation, with appropriate redaction, access controls and retention limits. [14](#ref-14)
-
-### 7. Evaluation measures quality; it does not certify correctness
-
-**Speaker:** Jyothi Madanlal.
-
-Evaluation asks a different question from observability: **was the behaviour acceptable?** Madanlal's evaluation-driven approach examines the final output, the trajectory of tool use and system health. An apparently good answer is not enough if the agent accessed the wrong user's information, chose the wrong operation or kept retrying without a useful outcome.
-
-Define success, run representative cases, investigate failures and improve the system. Production failures become regression cases; changes to prompts, models or tools trigger relevant evaluations. [17](#ref-17)
-
-Zheng and colleagues documented position, verbosity and self-enhancement biases in LLM judges. Calibrate rubrics against human-reviewed examples: a score of 0.85 is not automatically an 85% probability of correctness, and a second agent's approval is not independent proof. [10](#ref-10)
-
-**In practice:** combine deterministic checks, task-specific evaluations and sampled human review. Keep a held-out set to detect overfitting. In shadow mode, process mirrored requests **without exposing outputs or committing side effects** such as bookings or publishes.
-
-### 8. Agents need legitimate contracts with the outside world
-
-**Speaker:** BMK Lakshminarayanan.
-
-BMK's six components—identity, inbox, wallet, tools, memory and audit—are a useful checklist for agents that negotiate, book, buy or communicate on behalf of someone.
-
-The central point is stronger than the provocative talk title: **an external business does not owe your agent permission to act just because it can technically do so.** The business needs to know the principal, delegation, permitted operations, financial boundaries and proof of the result.
-
-A purchase agent, for example, needs an enforceable spending limit and a way to reconcile a timeout. Retrying an uncertain payment without checking an idempotency key or receipt can create a second charge. A “success” message from the LLM is not a transaction receipt.
-
-**In practice:** use supported APIs and explicit business authorization, with bounded delegation, receipts and dispute handling. Respect access restrictions rather than bypassing them.
+**My recommendation:** define stopping conditions, escalation evidence and a recovery owner before increasing autonomy.
 
 ## Mesh LLM: distributed inference on shared compute
 
@@ -193,16 +183,16 @@ A purchase agent, for example, needs an enforceable spending limit and a way to 
 
 Neale's **Mesh LLM** presentation concerned pooling spare compute across machines to serve language models. This is an inference-infrastructure project. Mesh LLM's repository documents a local compatible API, encrypted peer transport and layer/stage splitting for models that do not fit on one machine. It identifies the system as experimental. [20](#ref-20)
 
-**What research supports:** Petals demonstrates collaborative inference over resources from multiple parties. Speculative-decoding research demonstrates a way to propose and verify multiple candidate tokens, under a specific algorithm, while preserving the target distribution. These establish technical feasibility, not a universal latency, privacy or cost advantage for every mesh. [18](#ref-18), [19](#ref-19)
+**What research supports:** Petals demonstrates collaborative inference over resources from multiple parties. Speculative-decoding research demonstrates a way to propose and verify multiple candidate tokens, under a specific algorithm, while preserving the target distribution. These are related inference studies, not benchmarks or security evaluations of Mesh LLM itself. [18](#ref-18), [19](#ref-19)
 
-Prefill commonly has higher parallelism and is compute-bound; autoregressive decode often depends on memory bandwidth and sequential token generation. Bottlenecks vary with workload, batching, model architecture and hardware. [27](#ref-27)
+Prefill commonly has higher parallelism and is compute-bound; autoregressive decode often depends on memory bandwidth and sequential token generation. Bottlenecks vary with workload, batching, model architecture and hardware. [26](#ref-26)
 
-**Important qualifications:**
+**My assessment of the deployment trade-offs:**
 
-- Encryption protects transport; it does not by itself prove a compute participant is honest, hides information from that participant, or returns correct inference.
-- Idle hardware is not free infrastructure: energy, networking, maintenance, availability and operator time still matter.
+- Transport encryption and trust in a participating compute node are different concerns; I would not infer node honesty from encrypted links alone.
+- I would include energy, networking, maintenance and operator time when comparing spare-compute inference with a hosted service.
 
-**In practice:** evaluate participating-node trust, data handling, network latency, availability and total cost before choosing shared-compute inference.
+**My recommendation:** evaluate participating-node trust, data handling, network latency, availability and total cost before choosing shared-compute inference.
 
 ## Glossary: the terms without the hype
 
@@ -227,7 +217,7 @@ Prefill commonly has higher parallelism and is compute-bound; autoregressive dec
 
 ## References
 
-Sources were consulted on **27 October 2026**. Publication types are noted below.
+Sources were initially consulted on **27 October 2026**; subsequent checks are dated in the relevant entries. Publication types are noted below.
 
 <a id="ref-1"></a>
 **[1](#ref-1) Conference programme and attribution.** Agentic Engineering Day NZ, 22 October 2026. [Official programme](https://www.agenticengineering.day/). **Organiser material.**
@@ -305,13 +295,17 @@ Sources were consulted on **27 October 2026**. Publication types are noted below
 **[25](#ref-25) Amir Mohtasebi and Brian Wang.** [Lightweight Architecture Governance in the Age of AI](https://www.agenticengineering.day/speakers/amir-mohtasebi). **Public session description.**
 
 <a id="ref-26"></a>
-**[26](#ref-26) Terragni, V., Vella, A., Roop, P., & Blincoe, K. (2025).** _The Future of AI-Driven Software Engineering_. **ACM Transactions on Software Engineering and Methodology**. [DOI:10.1145/3715003](https://doi.org/10.1145/3715003). **Journal vision paper.**
+**[26](#ref-26) AWS Prescriptive Guidance.** [How AI inference works](https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-inference-architecture-and-best-practices-on-aws/how-ai-inference-works.html). **Technical architecture guidance.**
 
 <a id="ref-27"></a>
-**[27](#ref-27) AWS Prescriptive Guidance.** [How AI inference works](https://docs.aws.amazon.com/prescriptive-guidance/latest/gen-ai-inference-architecture-and-best-practices-on-aws/how-ai-inference-works.html). **Technical architecture guidance.**
+**[27](#ref-27) Josh Wulf.** [Software Factories: From Success to Scale—session description and biography](https://www.agenticengineering.day/speakers/josh-wulf). **Organiser-published speaker account; checked 29 October 2026.**
+
+<a id="ref-28"></a>
+**[28](#ref-28) AWS Compute Blog.** [AWS Nitro Isolation Engine: Formally verifying the hypervisor in the AWS Nitro System](https://aws.amazon.com/blogs/compute/aws-nitro-isolation-engine-formally-verifying-the-hypervisor-in-the-aws-nitro-system/), section “Formal verification”. **Technical explanation; checked 29 October 2026.**
+
+<a id="ref-29"></a>
+**[29](#ref-29) AWS Well-Architected Framework.** [REL04-BP04: Make all responses idempotent](https://docs.aws.amazon.com/wellarchitected/2023-10-03/framework/rel_prevent_interaction_failure_idempotent.html). **Technical reliability guidance; checked 29 October 2026.**
 
 ## Final takeaway
 
-**Clear intent → bounded authority → independently checked work → observable outcomes → informed human judgment.**
-
-Faster code generation is useful when this surrounding system can safely carry the work through to a delivered result.
+**My conclusion:** the useful thread connecting these talks is clear intent, bounded authority, independent checks, observable outcomes and informed human judgment—not code generation alone.
